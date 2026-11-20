@@ -10,7 +10,7 @@
 </head>
 <body>
     {% block body %}
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and request.resolver_match.app_name == "commute" and request.resolver_match.url_name != "about" and request.resolver_match.url_name != "device_list" and request.resolver_match.url_name != "device_detail" and request.resolver_match.url_name != "innovation" and request.resolver_match.url_name != "contact" %}
     <div class="app-shell">
         <aside class="sidebar">
             <a class="sidebar-brand" href="{% url 'commute:dashboard' %}">
@@ -34,9 +34,29 @@
     <nav class="navbar navbar-expand-lg bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">SmartCommute</a>
-            <div class="ms-auto">
-                <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'accounts:login' %}">Login</a>
-                <a class="btn btn-primary btn-sm" href="{% url 'accounts:register' %}">Register</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="publicNav">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'about' %}">About Us</a>
+                    <a class="nav-link" href="{% url 'devices' %}">Smart Devices</a>
+                    <a class="nav-link" href="{% url 'innovation' %}">Innovation</a>
+                    <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                </div>
+                <div class="ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'commute:dashboard' %}">Dashboard</a>
+                        <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">Logout</button>
+                        </form>
+                    {% else %}
+                        <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'accounts:login' %}">Login</a>
+                        <a class="btn btn-primary btn-sm" href="{% url 'accounts:register' %}">Register</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>

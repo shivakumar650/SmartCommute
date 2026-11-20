@@ -3,7 +3,15 @@ from django.contrib import admin
 # Register your models here.
 from django.contrib import admin
 
-from .models import JourneyHistory, Route, Traffic, Transport
+from .models import (
+    ContactMessage,
+    Innovation,
+    JourneyHistory,
+    Route,
+    SmartDevice,
+    Traffic,
+    Transport,
+)
 
 
 @admin.register(Route)
@@ -53,3 +61,24 @@ class JourneyHistoryAdmin(admin.ModelAdmin):
     )
     list_filter = ("transport_type", "searched_at")
     search_fields = ("user__username", "source", "destination")
+
+
+@admin.register(SmartDevice)
+class SmartDeviceAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("name", "description", "features", "benefits")
+
+
+@admin.register(Innovation)
+class InnovationAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_active")
+    list_filter = ("is_active",)
+    search_fields = ("title", "summary", "description", "benefits")
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "subject", "submitted_at", "is_resolved")
+    list_filter = ("is_resolved", "submitted_at")
+    search_fields = ("name", "email", "subject", "message")

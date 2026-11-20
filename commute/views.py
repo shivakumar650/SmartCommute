@@ -1,8 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from .forms import JourneyPlannerForm
-from .models import JourneyHistory, Route, Traffic, Transport
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+
+from .forms import ContactForm, JourneyPlannerForm
+from .models import (
+    ContactMessage,
+    Innovation,
+    JourneyHistory,
+    Route,
+    SmartDevice,
+    Traffic,
+    Transport,
+)
 from .recommender import rank_routes
 
 
@@ -119,3 +130,53 @@ def journey_history(request):
         "history.html",
         {"journeys": journeys},
     )
+
+
+def about(request):
+    return render(request, "about.html")
+
+
+def home(request):
+    featured_devices = SmartDevice.objects.filter(
+        is_active=True
+    )[:3]
+    innovations = Innovation.objects.filter(is_active=True)[:3]
+    return render(
+        request,
+        "home.html",
+        {
+            "featured_devices": featured_devices,
+            "innovations": innovations,
+        },
+    )
+
+
+def device_list(request):
+    devices = SmartDevice.objects.filter(is_active=True)
+    return render(request, "devices.html", {"devices": devices})
+
+
+def device_detail(request, device_id):
+    device = get_object_or_404(SmartDevice, id=device_id, is_active=True)
+    return render(request, "device_detail.html", {"device": device})
+
+
+def innovation(request):
+    innovations = Innovation.objects.filter(is_active=True)
+    return render(
+        request,
+        "innovation.html",
+        {"innovations": innovations},
+    )
+
+
+def contact(request):
+    form = ContactForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        ContactMessage.objects.create(**form.cleaned_data)
+        messages.success(
+            request,
+            "Thank you. Your inquiry was submitted successfully.",
+        )
+        return redirect("commute:contact")
+    return render(request, "contact.html", {"form": form})

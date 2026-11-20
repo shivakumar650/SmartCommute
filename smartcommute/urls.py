@@ -17,12 +17,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from django.views.generic import TemplateView
+from commute import views as commute_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', commute_views.home, name='home'),
+    path('about/', commute_views.about, name='about'),
+    path('devices/', commute_views.device_list, name='devices'),
+    path('devices/<int:device_id>/', commute_views.device_detail, name='device_detail'),
+    path('innovation/', commute_views.innovation, name='innovation'),
+    path('contact/', commute_views.contact, name='contact'),
     path('accounts/', include('accounts.urls')),
     path('commute/', include('commute.urls')),
     path('analytics/', include('analytics.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

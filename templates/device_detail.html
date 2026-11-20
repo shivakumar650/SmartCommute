@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ device.name }} - SmartCommute{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-5">
+        {% if device.image %}
+            <img src="{{ device.image.url }}" class="img-fluid rounded-4 shadow-sm w-100" alt="{{ device.name }}">
+        {% elif device.image_url %}
+            <img src="{{ device.image_url }}" class="img-fluid rounded-4 shadow-sm w-100" alt="{{ device.name }}">
+        {% else %}
+            <div class="device-placeholder detail-placeholder">SC</div>
+        {% endif %}
+    </div>
+    <div class="col-lg-7">
+        <h1 class="h2 fw-bold">{{ device.name }}</h1>
+        <p class="lead text-secondary">{{ device.description }}</p>
+        <h2 class="h5 mt-4">Working principle</h2>
+        <p>{{ device.working_principle|linebreaks }}</p>
+        <h2 class="h5 mt-4">Benefits and applications</h2>
+        <p>{{ device.benefits|linebreaks }}</p>
+    </div>
+</div>
+<div class="row g-4 mt-1">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h2 class="h5">Features</h2>
+            <ul class="mb-0">
+                {% for feature in device.feature_list %}
+                    <li>{{ feature }}</li>
+                {% empty %}
+                    <li>No features listed.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h2 class="h5">Specifications</h2>
+            <p class="mb-0">{{ device.specifications|default:"Specifications will be provided by the administrator."|linebreaks }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

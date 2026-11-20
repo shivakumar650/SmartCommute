@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Innovations - SmartCommute{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h1 class="h2 fw-bold">Commuting innovations</h1>
+    <p class="text-secondary">Explore practical ideas for safer and more intelligent transportation.</p>
+</div>
+{% if innovations %}
+<div class="row g-4">
+    {% for item in innovations %}
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h2 class="h5">{{ item.title }}</h2>
+            <p class="fw-semibold">{{ item.summary }}</p>
+            <p>{{ item.description|linebreaks }}</p>
+            <h3 class="h6">Benefits</h3>
+            <p class="text-secondary mb-0">{{ item.benefits|linebreaks }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card border-0 shadow-sm p-4">
+    <p class="text-secondary mb-0">Innovation information is not available.</p>
+</div>
+{% endif %}
+{% endblock %}

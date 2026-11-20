@@ -2,7 +2,15 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import JourneyHistory, Route, Traffic, Transport
+from .models import (
+    ContactMessage,
+    Innovation,
+    JourneyHistory,
+    Route,
+    SmartDevice,
+    Traffic,
+    Transport,
+)
 from .recommender import rank_routes
 
 
@@ -139,3 +147,53 @@ class SmartCommuteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["available_routes"], 1)
         self.assertEqual(response.context["total_journeys"], 1)
+
+    def test_public_informational_pages_render(self):
+        SmartDevice.objects.create(
+            name="Smart Bus Display",
+            description="Passenger route information display.",
+            features="Route display\nAccessibility",
+            working_principle="Displays networked route information.",
+            benefits="Improves passenger guidance.",
+        )
+        Innovation.objects.create(
+            title="Unified Guidance",
+            summary="A unified transportation concept.",
+            description="A system that combines route guidance.",
+            benefits="Reduces confusion.",
+        )
+
+        home = self.client.get(reverse("home"))
+        about = self.client.get(reverse("about"))
+        devices = self.client.get(reverse("devices"))
+        innovation = self.client.get(reverse("innovation"))
+
+        self.assertEqual(home.status_code, 200)
+        self.assertContains(home, "Smart Bus Display")
+        self.assertEqual(about.status_code, 200)
+        self.assertEqual(devices.status_code, 200)
+        self.assertEqual(innovation.status_code, 200)
+
+    def test_contact_form_validates_and_saves_message(self):
+        response = self.client.post(reverse("contact"), {
+            "name": "Test Visitor",
+            "email": "visitor@example.com",
+            "subject": "Website question",
+            "message": "Please provide more information.",
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            ContactMessage.objects.filter(
+                email="visitor@example.com"
+            ).exists()
+        )
+
+        invalid = self.client.post(reverse("contact"), {
+            "name": "",
+            "email": "invalid",
+            "subject": "",
+            "message": "short",
+        })
+        self.assertEqual(invalid.status_code, 200)
+        self.assertTrue(invalid.context["form"].errors)

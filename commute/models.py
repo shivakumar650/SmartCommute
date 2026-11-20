@@ -125,3 +125,56 @@ class JourneyHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.source} to {self.destination}"
+
+
+class SmartDevice(models.Model):
+    name = models.CharField(max_length=120)
+    image = models.ImageField(upload_to="devices/", blank=True)
+    image_url = models.URLField(blank=True)
+    description = models.TextField()
+    features = models.TextField(
+        help_text="Enter one feature per line."
+    )
+    working_principle = models.TextField()
+    benefits = models.TextField()
+    specifications = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def feature_list(self):
+        return [item.strip() for item in self.features.splitlines() if item.strip()]
+
+
+class Innovation(models.Model):
+    title = models.CharField(max_length=120)
+    summary = models.TextField()
+    description = models.TextField()
+    benefits = models.TextField()
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=120)
+    email = models.EmailField()
+    subject = models.CharField(max_length=180)
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-submitted_at"]
+
+    def __str__(self):
+        return f"{self.name}: {self.subject}"

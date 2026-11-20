@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from commute.models import Route, Traffic, Transport
+from commute.models import Innovation, Route, SmartDevice, Traffic, Transport
 
 
 class Command(BaseCommand):
@@ -81,4 +81,57 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(
             f"Seeded {len(route_objects)} routes, traffic records, and transport schedules."
+        ))
+
+        SmartDevice.objects.get_or_create(
+            name="Smart Bus Information Display",
+            defaults={
+                "description": "A connected information display that helps passengers see arrival information and available routes.",
+                "features": "Real-time route display\nAccessible passenger information\nWeather-resistant enclosure",
+                "working_principle": "The display receives route information and presents it to passengers at stops and terminals.",
+                "benefits": "Reduces waiting uncertainty and helps passengers choose suitable routes.",
+                "specifications": "Public display, digital route interface, network-ready design",
+                "image_url": "https://images.unsplash.com/photo-1494526585095-c41746248156",
+            },
+        )
+        SmartDevice.objects.get_or_create(
+            name="Smart Helmet System",
+            defaults={
+                "description": "A conceptual wearable commuting device that improves rider awareness and safety.",
+                "features": "Turn indicators\nHelmet communication\nEnhanced visibility",
+                "working_principle": "The helmet uses visible indicators and communication tools to help riders remain aware of surroundings.",
+                "benefits": "Improves rider visibility and communication.",
+                "specifications": "Wearable concept, rechargeable indicator system",
+            },
+        )
+        SmartDevice.objects.get_or_create(
+            name="Smart Parking Assistant",
+            defaults={
+                "description": "An information system that helps drivers locate suitable parking spaces.",
+                "features": "Parking status display\nGuidance indicators\nCapacity information",
+                "working_principle": "Parking status is collected and shown through a simple display or website.",
+                "benefits": "Reduces unnecessary vehicle circulation and saves time.",
+                "specifications": "Digital parking display, status management interface",
+            },
+        )
+
+        Innovation.objects.get_or_create(
+            title="Unified Public Transport Guidance",
+            defaults={
+                "summary": "One understandable display system for buses, routes and travel guidance.",
+                "description": "A central information platform can combine stops, schedules and route options for commuters.",
+                "benefits": "Improves accessibility, reduces confusion and supports informed journey decisions.",
+            },
+        )
+        Innovation.objects.get_or_create(
+            title="Safer Bicycle Corridors",
+            defaults={
+                "summary": "Protected bicycle lanes with clear digital and physical guidance.",
+                "description": "The concept uses dedicated lanes, visible signals and regular information points.",
+                "benefits": "Encourages cycling and improves safety for riders.",
+            },
+        )
+
+        self.stdout.write(self.style.SUCCESS(
+            "Seeded smart devices and innovation records."
         ))
