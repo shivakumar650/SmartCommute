@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - SmartCommute{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Dashboard</h1>
+        <p class="text-secondary mb-0">Welcome, {{ user.first_name|default:user.username }}.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'commute:journey_planner' %}">Plan a journey</a>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card border-0 shadow-sm p-3">
+            <span class="text-secondary">Journeys searched</span>
+            <strong class="stat-number">{{ total_journeys }}</strong>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card border-0 shadow-sm p-3">
+            <span class="text-secondary">Available routes</span>
+            <strong class="stat-number">{{ available_routes }}</strong>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card border-0 shadow-sm p-3">
+            <span class="text-secondary">Low traffic routes</span>
+            <strong class="stat-number text-success">{{ traffic_summary.Low }}</strong>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card border-0 shadow-sm p-3">
+            <span class="text-secondary">Heavy traffic routes</span>
+            <strong class="stat-number text-danger">{{ traffic_summary.Heavy }}</strong>
+        </div>
+    </div>
+</div>
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h2 class="h5 fw-bold mb-3">Recent journey searches</h2>
+            {% if recent_journeys %}
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead><tr><th>Journey</th><th>Transport</th><th>Duration</th><th>Searched</th></tr></thead>
+                    <tbody>
+                    {% for journey in recent_journeys %}
+                        <tr>
+                            <td>{{ journey.source }} <span class="text-secondary">to</span> {{ journey.destination }}</td>
+                            <td>{{ journey.transport_type }}</td>
+                            <td>{{ journey.estimated_travel_time }} min</td>
+                            <td>{{ journey.searched_at|date:"M d, H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="text-secondary mb-0">No journey searches yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-4 mb-3">
+            <h2 class="h6 fw-bold mb-3">Traffic summary</h2>
+            <canvas id="trafficChart" height="150"
+                    data-low="{{ traffic_summary.Low }}"
+                    data-moderate="{{ traffic_summary.Moderate }}"
+                    data-heavy="{{ traffic_summary.Heavy }}"
+                    aria-label="Traffic condition chart"></canvas>
+        </div>
+        <div class="card border-0 shadow-sm p-4">
+            <h2 class="h6 fw-bold mb-3">Transport options</h2>
+            {% for transport in transport_types %}
+                <span class="badge text-bg-light border me-1 mb-1">{{ transport }}</span>
+            {% empty %}
+                <p class="text-secondary mb-0">No options available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

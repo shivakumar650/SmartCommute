@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Journey History - SmartCommute{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Journey history</h1>
+        <p class="text-secondary mb-0">Your previous route searches.</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+    {% if journeys %}
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Starting location</th>
+                    <th>Destination</th>
+                    <th>Transport</th>
+                    <th>Recommended route</th>
+                    <th>Estimated duration</th>
+                    <th>Search date and time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for journey in journeys %}
+                <tr>
+                    <td>{{ journey.source }}</td>
+                    <td>{{ journey.destination }}</td>
+                    <td>{{ journey.transport_type }}</td>
+                    <td>{{ journey.recommended_route.route_name|default:"No route found" }}</td>
+                    <td>{{ journey.estimated_travel_time }} min</td>
+                    <td>{{ journey.searched_at|date:"M d, Y, H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-secondary mb-0">
+            You have not searched for a journey yet.
+            <a href="{% url 'commute:journey_planner' %}">Plan your first journey</a>.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

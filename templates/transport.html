@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Transport Information - SmartCommute{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Transport information</h1>
+        <p class="text-secondary mb-0">Predefined demonstration schedules and fares.</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+    {% if transport_records %}
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Transport type</th>
+                    <th>Route</th>
+                    <th>Departure time</th>
+                    <th>Approximate fare</th>
+                    <th>Estimated duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transport in transport_records %}
+                <tr>
+                    <td>
+                        {% if transport.transport_type == "Bus" %}
+                            <span class="badge text-bg-primary">Bus</span>
+                        {% elif transport.transport_type == "Car" %}
+                            <span class="badge text-bg-dark">Car</span>
+                        {% else %}
+                            <span class="badge text-bg-success">Bike</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ transport.route.route_name }}</strong>
+                        <div class="small text-secondary">
+                            {{ transport.route.source }} to {{ transport.route.destination }}
+                        </div>
+                    </td>
+                    <td>{{ transport.departure_time|time:"H:i" }}</td>
+                    <td>Rs. {{ transport.approximate_fare }}</td>
+                    <td>{{ transport.estimated_duration }} min</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-secondary mb-0">No transport schedules are available.</p>
+    {% endif %}
+</div>
+{% endblock %}

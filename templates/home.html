@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}SmartCommute - Intelligent Commuting{% endblock %}
+{% block content %}
+<div class="hero card border-0 shadow-sm p-5">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <span class="badge text-bg-primary mb-3">College commuting solution</span>
+            <h1 class="display-5 fw-bold">Plan smarter. Commute better.</h1>
+            <p class="lead text-secondary">
+                Compare routes, review demonstration traffic conditions, and receive a rule-based route recommendation.
+            </p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'commute:dashboard' %}" class="btn btn-primary btn-lg">Open dashboard</a>
+            {% else %}
+                <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg me-2">Get started</a>
+                <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-lg">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

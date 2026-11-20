@@ -1,0 +1,103 @@
+body {
+    background: #f4f7fb;
+    color: #1d2a3a;
+}
+
+.hero {
+    min-height: 340px;
+    background: linear-gradient(135deg, #ffffff 30%, #eaf3ff 100%);
+}
+
+.card {
+    border-radius: 16px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 9px;
+}
+
+.app-shell { min-height: 100vh; }
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    color: #fff;
+    background: #102a43;
+}
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 28px;
+}
+.brand-mark {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #3b82f6;
+}
+.sidebar-nav { display: flex; flex-direction: column; gap: 5px; }
+.sidebar-nav a {
+    padding: 11px 12px;
+    border-radius: 8px;
+    color: #dbeafe;
+    text-decoration: none;
+}
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    background: rgba(255,255,255,.12);
+    color: #fff;
+}
+.sidebar-logout { margin-top: auto; }
+.app-content {
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 32px;
+}
+.stat-card { min-height: 120px; }
+.stat-card:hover {
+    transform: translateY(-2px);
+    transition: transform .2s ease;
+}
+.table {
+    --bs-table-bg: transparent;
+}
+.table-primary {
+    --bs-table-bg: #eaf3ff;
+}
+#trafficChart {
+    max-height: 180px;
+    margin-bottom: 16px;
+}
+.stat-number {
+    display: block;
+    margin-top: 12px;
+    font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+    .sidebar-nav a { white-space: nowrap; }
+    .sidebar-logout { margin-top: 16px; }
+    .app-content {
+        margin-left: 0;
+        padding: 20px 16px;
+    }
+}

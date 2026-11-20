@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login - SmartCommute{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="card border-0 shadow-sm p-4">
+            <h2 class="h4 fw-bold mb-3">Welcome back</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    {{ form.password.errors }}
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Login</button>
+            </form>
+            <p class="text-center mt-3 mb-0">
+                New here? <a href="{% url 'accounts:register' %}">Create an account</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

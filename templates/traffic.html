@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Traffic Information - SmartCommute{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Traffic information</h1>
+        <p class="text-secondary mb-0">
+            Demonstration traffic conditions stored in the sample database.
+        </p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+    {% if traffic_records %}
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Condition</th>
+                    <th>Estimated delay</th>
+                    <th>Last updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in traffic_records %}
+                <tr>
+                    <td class="fw-semibold">{{ record.route.route_name }}</td>
+                    <td>{{ record.route.source }}</td>
+                    <td>{{ record.route.destination }}</td>
+                    <td>
+                        {% if record.traffic_level == "Low" %}
+                            <span class="badge text-bg-success">Low Traffic</span>
+                        {% elif record.traffic_level == "Moderate" %}
+                            <span class="badge text-bg-warning text-dark">Moderate Traffic</span>
+                        {% else %}
+                            <span class="badge text-bg-danger">Heavy Traffic</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.delay_minutes }} minutes</td>
+                    <td>{{ record.updated_at|date:"M d, Y, H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-secondary mb-0">No traffic records are available.</p>
+    {% endif %}
+</div>
+{% endblock %}
